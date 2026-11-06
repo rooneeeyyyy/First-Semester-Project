@@ -2,6 +2,92 @@
 #include "ui.h"
 #include "food.h"
 #include "map.h"
+#include "cafeteria.h"
+#include "utils.h"
+
+#define MAX_INPUT 100
+
+static void foodMenu(void)
+{
+    char query[MAX_INPUT];
+    int choice;
+
+    do {
+        printf("\n--- Food ---\n");
+        printf("1. Show all food\n");
+        printf("2. Search by name or category\n");
+        printf("0. Back\n");
+        printf("Enter your choice: ");
+        choice = readChoice();
+
+        switch (choice) {
+            case 1:
+                displayFood();
+                break;
+            case 2:
+                readLine("Enter food name or category: ", query, sizeof(query));
+
+                if (query[0] == '\0') {
+                    printMessage("Search cannot be empty.");
+                }
+                else if (searchFood(query) == 0) {
+                    printMessage("No matching food found.");
+                }
+
+                break;
+            case 0:
+                break;
+            default:
+                printMessage("Invalid choice. Enter 0, 1 or 2.");
+                break;
+        }
+    } while (choice != 0);
+}
+
+static void mapMenu(void)
+{
+    char query[MAX_INPUT];
+    int choice;
+    int id;
+
+    do {
+        printf("\n--- Campus Map ---\n");
+        printf("1. Show all locations\n");
+        printf("2. Search for a location\n");
+        printf("0. Back\n");
+        printf("Enter your choice: ");
+        choice = readChoice();
+
+        switch (choice) {
+            case 1:
+                printLocations();
+                break;
+            case 2:
+                readLine("Enter location name: ", query, sizeof(query));
+
+                if (query[0] == '\0') {
+                    printMessage("Search cannot be empty.");
+                }
+                else {
+                    id = findLocation(query);
+
+                    if (id == -1) {
+                        printMessage("Location not found.");
+                    }
+                    else {
+                        printf("Found: ID %d - %s\n", id, getLocationName(id));
+                    }
+                }
+
+                break;
+            case 0:
+                break;
+            default:
+                printMessage("Invalid choice. Enter 0, 1 or 2.");
+                break;
+        }
+    } while (choice != 0);
+}
 
 int main(void)
 {
@@ -13,13 +99,13 @@ int main(void)
 
         switch (choice) {
             case 1:
-                displayFood();
+                foodMenu();
                 break;
             case 2:
-                printMessage("Cafeterias feature coming soon.");
+                listCafeterias();
                 break;
             case 3:
-                printLocations();
+                mapMenu();
                 break;
             case 4:
                 printMessage("Assistant feature coming soon.");
