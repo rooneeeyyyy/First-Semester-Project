@@ -1,0 +1,4 @@
+vendor_id,name,location_id,opening_hours
+1,Test Cafe One,4,09:00-17:00
+2,Test Cafe Two,4,10:00-16:00
+3,Test Tea Stall,7,08:00-18:00

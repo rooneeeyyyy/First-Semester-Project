@@ -1,0 +1,9 @@
+food_id,name,category,price,vendor_id
+1,Test Biryani,Rice,250,1
+2,Test Chicken Roll,Snacks,180,1
+3,Test Samosa,Snacks,50,2
+4,Test Fries,Snacks,150,2
+5,Test Tea,Drinks,60,3
+6,Test Cold Drink,Drinks,100,3
+7,Test Burger,Fast Food,300,1
+8,Test Biryani,Rice,270,2
