@@ -2,6 +2,7 @@
 #include "ui.h"
 #include "food.h"
 #include "map.h"
+#include "route.h"
 #include "cafeteria.h"
 #include "utils.h"
 
@@ -44,6 +45,36 @@ static void foodMenu(void)
     } while (choice != 0);
 }
 
+static void routeMenu(void)
+{
+    char startName[MAX_INPUT];
+    char endName[MAX_INPUT];
+    int start;
+    int end;
+
+    readLine("Enter start location: ", startName, sizeof(startName));
+    start = findLocation(startName);
+
+    if (start == -1) {
+        printMessage("Start location not found.");
+
+        return;
+    }
+
+    readLine("Enter destination: ", endName, sizeof(endName));
+    end = findLocation(endName);
+
+    if (end == -1) {
+        printMessage("Destination not found.");
+
+        return;
+    }
+
+    printf("From: %s\n", getLocationName(start));
+    printf("To: %s\n", getLocationName(end));
+    printRoute(start, end);
+}
+
 static void mapMenu(void)
 {
     char query[MAX_INPUT];
@@ -55,6 +86,7 @@ static void mapMenu(void)
         printf("1. Show all locations\n");
         printf("2. Search for a location\n");
         printf("3. Show connections\n");
+        printf("4. Find a route\n");
         printf("0. Back\n");
         printf("Enter your choice: ");
         choice = readChoice();
@@ -84,10 +116,13 @@ static void mapMenu(void)
             case 3:
                 printRoutes();
                 break;
+            case 4:
+                routeMenu();
+                break;
             case 0:
                 break;
             default:
-                printMessage("Invalid choice. Enter 0, 1, 2 or 3.");
+                printMessage("Invalid choice. Enter 0, 1, 2, 3 or 4.");
                 break;
         }
     } while (choice != 0);

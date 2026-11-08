@@ -22,5 +22,7 @@ void printLocations(void);
 void printRoutes(void);
 int findLocation(const char *name);
 const char *getLocationName(int id);
+int getLocationCount(void);
+int getDistance(int from, int to);
 
 #endif

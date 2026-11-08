@@ -177,3 +177,20 @@ const char *getLocationName(int id)
 
     return locations[id - 1].name;
 }
+int getLocationCount(void)
+{
+    return locationCount;
+}
+
+int getDistance(int from, int to)
+{
+    int i;
+
+    for (i = 0; i < routeCount; i++) {
+        if ((routes[i].from == from && routes[i].to == to) || (routes[i].from == to && routes[i].to == from)) {
+            return routes[i].distance;
+        }
+    }
+
+    return 0;
+}
