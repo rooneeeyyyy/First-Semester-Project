@@ -1,17 +1,92 @@
 #include <stdio.h>
+#include <string.h>
 #include "food.h"
 #include "utils.h"
 
-static const Food foods[FOOD_COUNT] = {
-    {1, "Test Biryani", "Rice", 250, 1},
-    {2, "Test Chicken Roll", "Snacks", 180, 1},
-    {3, "Test Samosa", "Snacks", 50, 2},
-    {4, "Test Fries", "Snacks", 150, 2},
-    {5, "Test Tea", "Drinks", 60, 3},
-    {6, "Test Cold Drink", "Drinks", 100, 3},
-    {7, "Test Burger", "Fast Food", 300, 1},
-    {8, "Test Biryani", "Rice", 270, 2}
-};
+static Food foods[MAX_FOOD];
+static int foodCount = 0;
+
+static int foodIdExists(int id)
+{
+    int i;
+
+    for (i = 0; i < foodCount; i++) {
+        if (foods[i].id == id) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int loadFood(const char *path)
+{
+    FILE *fp;
+    char line[MAX_LINE];
+    char *fields[5];
+    int lineNumber;
+    int fieldCount;
+    int id;
+    int price;
+    int vendorId;
+    int valid;
+
+    fp = fopen(path, "r");
+
+    if (fp == NULL) {
+        printf("Error: cannot open %s\n", path);
+
+        return -1;
+    }
+
+    foodCount = 0;
+    lineNumber = 0;
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        lineNumber++;
+
+        if (lineNumber == 1) {
+            continue;
+        }
+
+        trimNewline(line);
+
+        if (line[0] == '\0') {
+            continue;
+        }
+
+        fieldCount = splitCsv(line, fields, 5);
+        valid = fieldCount == 5;
+
+        if (valid) {
+            valid = parsePositiveInt(fields[0], &id)
+                && parsePositiveInt(fields[3], &price)
+                && parsePositiveInt(fields[4], &vendorId)
+                && fields[1][0] != '\0'
+                && fields[2][0] != '\0'
+                && strlen(fields[1]) < MAX_FOOD_NAME
+                && strlen(fields[2]) < MAX_CATEGORY
+                && !foodIdExists(id)
+                && foodCount < MAX_FOOD;
+        }
+
+        if (!valid) {
+            printf("Warning: %s line %d skipped (bad row)\n", path, lineNumber);
+            continue;
+        }
+
+        foods[foodCount].id = id;
+        strcpy(foods[foodCount].name, fields[1]);
+        strcpy(foods[foodCount].category, fields[2]);
+        foods[foodCount].price = price;
+        foods[foodCount].vendorId = vendorId;
+        foodCount++;
+    }
+
+    fclose(fp);
+
+    return foodCount;
+}
 
 static void printFoodHeader(void)
 {
@@ -29,7 +104,7 @@ void displayFood(void)
 
     printFoodHeader();
 
-    for (i = 0; i < FOOD_COUNT; i++) {
+    for (i = 0; i < foodCount; i++) {
         printFoodRow(&foods[i]);
     }
 }
@@ -41,7 +116,7 @@ int searchFood(const char *query)
 
     count = 0;
 
-    for (i = 0; i < FOOD_COUNT; i++) {
+    for (i = 0; i < foodCount; i++) {
         if (containsIgnoreCase(foods[i].name, query) || containsIgnoreCase(foods[i].category, query)) {
             if (count == 0) {
                 printFoodHeader();

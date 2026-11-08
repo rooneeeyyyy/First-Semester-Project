@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "utils.h"
@@ -79,6 +80,49 @@ int readLine(const char *prompt, char *buffer, int size)
 
     trimNewline(buffer);
     trimSpaces(buffer);
+
+    return 1;
+}
+
+int splitCsv(char *line, char *fields[], int maxFields)
+{
+    int count;
+    char *p;
+
+    count = 1;
+    fields[0] = line;
+
+    for (p = line; *p != '\0'; p++) {
+        if (*p == ',') {
+            *p = '\0';
+
+            if (count < maxFields) {
+                fields[count] = p + 1;
+            }
+
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int parsePositiveInt(const char *text, int *value)
+{
+    char *end;
+    long number;
+
+    if (text[0] == '\0') {
+        return 0;
+    }
+
+    number = strtol(text, &end, 10);
+
+    if (*end != '\0' || number <= 0 || number > 1000000) {
+        return 0;
+    }
+
+    *value = (int)number;
 
     return 1;
 }

@@ -54,6 +54,7 @@ static void mapMenu(void)
         printf("\n--- Campus Map ---\n");
         printf("1. Show all locations\n");
         printf("2. Search for a location\n");
+        printf("3. Show connections\n");
         printf("0. Back\n");
         printf("Enter your choice: ");
         choice = readChoice();
@@ -80,10 +81,13 @@ static void mapMenu(void)
                 }
 
                 break;
+            case 3:
+                printRoutes();
+                break;
             case 0:
                 break;
             default:
-                printMessage("Invalid choice. Enter 0, 1 or 2.");
+                printMessage("Invalid choice. Enter 0, 1, 2 or 3.");
                 break;
         }
     } while (choice != 0);
@@ -92,6 +96,24 @@ static void mapMenu(void)
 int main(void)
 {
     int choice;
+    int locationTotal;
+    int routeTotal;
+    int foodTotal;
+    int cafeteriaTotal;
+
+    locationTotal = loadLocations("data/locations.csv");
+    routeTotal = loadRoutes("data/routes.csv");
+    foodTotal = loadFood("data/food.csv");
+    cafeteriaTotal = loadCafeterias("data/cafeterias.csv");
+
+    if (locationTotal <= 0 || routeTotal <= 0 || foodTotal <= 0 || cafeteriaTotal <= 0) {
+        printMessage("Error: required data could not be loaded.");
+        printMessage("Run the program from the project root folder.");
+
+        return 1;
+    }
+
+    printf("Loaded: %d locations, %d routes, %d food items, %d cafeterias\n", locationTotal, routeTotal, foodTotal, cafeteriaTotal);
 
     do {
         showMainMenu();
