@@ -6,6 +6,7 @@
 #include "cafeteria.h"
 #include "utils.h"
 #include "assistant.h"
+#include "favorites.h"
 
 #define MAX_INPUT 100
 
@@ -149,6 +150,158 @@ static void cafeteriaMenu(void)
     } while (choice != 0);
 }
 
+static int resolveLocation(const char *text, const char *label)
+{
+    int ids[MAX_LOCATIONS];
+    int count;
+    int id;
+    int i;
+
+    if (text[0] == '\0') {
+        printf("%s not found.\n", label);
+
+        return -1;
+    }
+
+    id = findLocation(text);
+
+    if (id != -1) {
+        return id;
+    }
+
+    count = searchLocations(text, ids, MAX_LOCATIONS);
+
+    if (count == 0) {
+        printf("%s not found.\n", label);
+
+        return -1;
+    }
+
+    if (count == 1) {
+        printf("Matched: %s\n", getLocationName(ids[0]));
+
+        return ids[0];
+    }
+
+    printf("Several places match '%s':\n", text);
+
+    for (i = 0; i < count; i++) {
+        printf("  %s\n", getLocationName(ids[i]));
+    }
+
+    printMessage("Please type a more specific name.");
+
+    return -1;
+}
+
+static int askFavoriteType(void)
+{
+    char text[MAX_INPUT];
+    int type;
+
+    printf("1. Food\n2. Cafeteria\n3. Location\n");
+    readLine("Choose a type (1-3): ", text, sizeof(text));
+
+    if (!parsePositiveInt(text, &type) || type > 3) {
+        printMessage("Invalid type. Enter 1, 2 or 3.");
+
+        return 0;
+    }
+
+    return type;
+}
+
+static void showFavoriteChoices(int type)
+{
+    if (type == FAV_FOOD) {
+        displayFood();
+    }
+    else if (type == FAV_CAFETERIA) {
+        listCafeterias();
+    }
+    else {
+        printLocations();
+    }
+}
+
+static void favoritesMenu(void)
+{
+    char text[MAX_INPUT];
+    int choice;
+    int type;
+    int id;
+    int result;
+
+    do {
+        printf("\n--- Favorites ---\n");
+        printf("1. Show favorites\n");
+        printf("2. Add a favorite\n");
+        printf("3. Remove a favorite\n");
+        printf("0. Back\n");
+        printf("Enter your choice: ");
+        choice = readChoice();
+
+        switch (choice) {
+            case 1:
+                listFavorites();
+                break;
+            case 2:
+                type = askFavoriteType();
+
+                if (type != 0) {
+                    showFavoriteChoices(type);
+                    readLine("Enter the ID to add: ", text, sizeof(text));
+
+                    if (!parsePositiveInt(text, &id)) {
+                        printMessage("Invalid ID.");
+                    }
+                    else {
+                        result = addFavorite(type, id);
+
+                        if (result == 1) {
+                            printMessage("Added to favorites.");
+                        }
+                        else if (result == 0) {
+                            printMessage("Already in your favorites.");
+                        }
+                        else if (result == -1) {
+                            printMessage("That ID does not exist.");
+                        }
+                        else {
+                            printMessage("Favorites list is full.");
+                        }
+                    }
+                }
+
+                break;
+            case 3:
+                type = askFavoriteType();
+
+                if (type != 0) {
+                    listFavorites();
+                    readLine("Enter the ID to remove: ", text, sizeof(text));
+
+                    if (!parsePositiveInt(text, &id)) {
+                        printMessage("Invalid ID.");
+                    }
+                    else if (removeFavorite(type, id)) {
+                        printMessage("Removed from favorites.");
+                    }
+                    else {
+                        printMessage("That item is not in your favorites.");
+                    }
+                }
+
+                break;
+            case 0:
+                break;
+            default:
+                printMessage("Invalid choice. Enter 0, 1, 2 or 3.");
+                break;
+        }
+    } while (choice != 0);
+}
+
 static void routeMenu(void)
 {
     char startName[MAX_INPUT];
@@ -157,20 +310,16 @@ static void routeMenu(void)
     int end;
 
     readLine("Enter start location: ", startName, sizeof(startName));
-    start = findLocation(startName);
+    start = resolveLocation(startName, "Start location");
 
     if (start == -1) {
-        printMessage("Start location not found.");
-
         return;
     }
 
     readLine("Enter destination: ", endName, sizeof(endName));
-    end = findLocation(endName);
+    end = resolveLocation(endName, "Destination");
 
     if (end == -1) {
-        printMessage("Destination not found.");
-
         return;
     }
 
@@ -206,12 +355,9 @@ static void mapMenu(void)
                     printMessage("Search cannot be empty.");
                 }
                 else {
-                    id = findLocation(query);
+                    id = resolveLocation(query, "Location");
 
-                    if (id == -1) {
-                        printMessage("Location not found.");
-                    }
-                    else {
+                    if (id != -1) {
                         printf("Found: ID %d - %s\n", id, getLocationName(id));
                     }
                 }
@@ -275,6 +421,7 @@ int main(void)
     }
 
     printf("Loaded: %d locations, %d routes, %d food items, %d cafeterias\n", locationTotal, routeTotal, foodTotal, cafeteriaTotal);
+    loadFavorites("data/favorites.txt");
 
     do {
         showMainMenu();
@@ -293,11 +440,14 @@ int main(void)
             case 4:
                 assistantMenu();
                 break;
+            case 5:
+                favoritesMenu();
+                break;
             case 0:
                 printMessage("Goodbye!");
                 break;
             default:
-                printMessage("Invalid choice. Enter a number from 0 to 4.");
+                printMessage("Invalid choice. Enter a number from 0 to 5.");
                 break;
         }
     } while (choice != 0);

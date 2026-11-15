@@ -282,3 +282,29 @@ int countFoodMatches(const char *word)
 
     return count;
 }
+
+const char *getFoodName(int id)
+{
+    int i;
+
+    for (i = 0; i < foodCount; i++) {
+        if (foods[i].id == id) {
+            return foods[i].name;
+        }
+    }
+
+    return NULL;
+}
+
+int getFoodPrice(int id)
+{
+    int i;
+
+    for (i = 0; i < foodCount; i++) {
+        if (foods[i].id == id) {
+            return foods[i].price;
+        }
+    }
+
+    return 0;
+}

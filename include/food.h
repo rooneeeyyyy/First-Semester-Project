@@ -20,5 +20,7 @@ int searchByBudget(int maxPrice, const char *category);
 int showMenuByVendor(int vendorId);
 int compareMenus(const int vendorIds[], int vendorCount);
 int countFoodMatches(const char *word);
+const char *getFoodName(int id);
+int getFoodPrice(int id);
 
 #endif

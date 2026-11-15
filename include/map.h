@@ -24,5 +24,6 @@ int findLocation(const char *name);
 const char *getLocationName(int id);
 int getLocationCount(void);
 int getDistance(int from, int to);
+int searchLocations(const char *query, int ids[], int maxIds);
 
 #endif

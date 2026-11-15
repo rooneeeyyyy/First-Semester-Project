@@ -10,6 +10,7 @@ void showMainMenu(void)
     printf("2. Cafeterias\n");
     printf("3. Campus Map\n");
     printf("4. Assistant\n");
+    printf("5. Favorites\n");
     printf("0. Exit\n");
     printf("Enter your choice: ");
 }

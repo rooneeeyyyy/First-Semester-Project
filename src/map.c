@@ -195,3 +195,20 @@ int getDistance(int from, int to)
 
     return 0;
 }
+
+int searchLocations(const char *query, int ids[], int maxIds)
+{
+    int i;
+    int count;
+
+    count = 0;
+
+    for (i = 0; i < locationCount && count < maxIds; i++) {
+        if (containsIgnoreCase(locations[i].name, query)) {
+            ids[count] = locations[i].id;
+            count++;
+        }
+    }
+
+    return count;
+}
