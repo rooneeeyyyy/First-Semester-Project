@@ -14,5 +14,7 @@ typedef struct {
 
 int loadCafeterias(const char *path);
 void listCafeterias(void);
+const char *getCafeteriaName(int id);
+int viewCafeteria(int id);
 
 #endif

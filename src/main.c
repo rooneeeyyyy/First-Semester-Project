@@ -5,18 +5,23 @@
 #include "route.h"
 #include "cafeteria.h"
 #include "utils.h"
+#include "assistant.h"
 
 #define MAX_INPUT 100
 
 static void foodMenu(void)
 {
     char query[MAX_INPUT];
+    char budgetText[MAX_INPUT];
+    char category[MAX_INPUT];
     int choice;
+    int budget;
 
     do {
         printf("\n--- Food ---\n");
         printf("1. Show all food\n");
         printf("2. Search by name or category\n");
+        printf("3. Filter by budget\n");
         printf("0. Back\n");
         printf("Enter your choice: ");
         choice = readChoice();
@@ -36,10 +41,109 @@ static void foodMenu(void)
                 }
 
                 break;
+            case 3:
+                readLine("Enter maximum budget in PKR: ", budgetText, sizeof(budgetText));
+
+                if (!parsePositiveInt(budgetText, &budget)) {
+                    printMessage("Budget must be a whole number above 0.");
+                }
+                else {
+                    readLine("Enter category (or press Enter for all): ", category, sizeof(category));
+
+                    if (searchByBudget(budget, category) == 0) {
+                        printMessage("No items found within this budget.");
+                    }
+                }
+
+                break;
             case 0:
                 break;
             default:
-                printMessage("Invalid choice. Enter 0, 1 or 2.");
+                printMessage("Invalid choice. Enter 0, 1, 2 or 3.");
+                break;
+        }
+    } while (choice != 0);
+}
+
+static void compareMenu(void)
+{
+    char line[MAX_INPUT];
+    int ids[4];
+    int count;
+    int i;
+    int j;
+
+    readLine("Enter 2 or 3 cafeteria IDs separated by spaces: ", line, sizeof(line));
+    count = sscanf(line, "%d %d %d %d", &ids[0], &ids[1], &ids[2], &ids[3]);
+
+    if (count < 2) {
+        printMessage("Enter at least two cafeteria IDs.");
+
+        return;
+    }
+
+    if (count > 3) {
+        printMessage("You can compare at most three cafeterias.");
+
+        return;
+    }
+
+    for (i = 0; i < count; i++) {
+        if (getCafeteriaName(ids[i]) == NULL) {
+            printf("Cafeteria %d not found.\n", ids[i]);
+
+            return;
+        }
+
+        for (j = i + 1; j < count; j++) {
+            if (ids[i] == ids[j]) {
+                printMessage("Each cafeteria can be chosen only once.");
+
+                return;
+            }
+        }
+    }
+
+    compareMenus(ids, count);
+}
+
+static void cafeteriaMenu(void)
+{
+    char idText[MAX_INPUT];
+    int choice;
+    int id;
+
+    do {
+        printf("\n--- Cafeterias ---\n");
+        printf("1. List cafeterias\n");
+        printf("2. View a cafeteria and its menu\n");
+        printf("3. Compare cafeterias\n");
+        printf("0. Back\n");
+        printf("Enter your choice: ");
+        choice = readChoice();
+
+        switch (choice) {
+            case 1:
+                listCafeterias();
+                break;
+            case 2:
+                readLine("Enter cafeteria ID: ", idText, sizeof(idText));
+
+                if (!parsePositiveInt(idText, &id)) {
+                    printMessage("Invalid cafeteria ID.");
+                }
+                else if (!viewCafeteria(id)) {
+                    printMessage("Cafeteria not found.");
+                }
+
+                break;
+            case 3:
+                compareMenu();
+                break;
+            case 0:
+                break;
+            default:
+                printMessage("Invalid choice. Enter 0, 1, 2 or 3.");
                 break;
         }
     } while (choice != 0);
@@ -128,6 +232,28 @@ static void mapMenu(void)
     } while (choice != 0);
 }
 
+static void assistantMenu(void)
+{
+    char line[MAX_INPUT];
+    int running;
+
+    printMessage("\nAssistant: ask about food, prices, cafeterias, locations or routes.");
+    printMessage("Type 'help' for examples or 'back' to return.");
+    running = 1;
+
+    while (running) {
+        if (!readLine("\nYou: ", line, sizeof(line))) {
+            running = 0;
+        }
+        else if (equalsIgnoreCase(line, "back") || equalsIgnoreCase(line, "0")) {
+            running = 0;
+        }
+        else {
+            processQuery(line);
+        }
+    }
+}
+
 int main(void)
 {
     int choice;
@@ -159,13 +285,13 @@ int main(void)
                 foodMenu();
                 break;
             case 2:
-                listCafeterias();
+                cafeteriaMenu();
                 break;
             case 3:
                 mapMenu();
                 break;
             case 4:
-                printMessage("Assistant feature coming soon.");
+                assistantMenu();
                 break;
             case 0:
                 printMessage("Goodbye!");

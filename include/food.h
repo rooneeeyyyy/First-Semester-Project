@@ -16,5 +16,9 @@ typedef struct {
 int loadFood(const char *path);
 void displayFood(void);
 int searchFood(const char *query);
+int searchByBudget(int maxPrice, const char *category);
+int showMenuByVendor(int vendorId);
+int compareMenus(const int vendorIds[], int vendorCount);
+int countFoodMatches(const char *word);
 
 #endif

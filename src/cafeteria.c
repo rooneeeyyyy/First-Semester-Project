@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "cafeteria.h"
+#include "food.h"
 #include "map.h"
 #include "utils.h"
 
@@ -92,7 +93,7 @@ void listCafeterias(void)
     int i;
     const char *place;
 
-    printf("\n%-4s %-16s %-16s %s\n", "ID", "Name", "Location", "Hours (test data)");
+    printf("\n%-4s %-16s %-16s %s\n", "ID", "Name", "Location", "Hours");
 
     for (i = 0; i < cafeteriaCount; i++) {
         place = getLocationName(cafeterias[i].locationId);
@@ -103,4 +104,46 @@ void listCafeterias(void)
 
         printf("%-4d %-16s %-16s %s\n", cafeterias[i].id, cafeterias[i].name, place, cafeterias[i].hours);
     }
+}
+
+const char *getCafeteriaName(int id)
+{
+    int i;
+
+    for (i = 0; i < cafeteriaCount; i++) {
+        if (cafeterias[i].id == id) {
+            return cafeterias[i].name;
+        }
+    }
+
+    return NULL;
+}
+
+int viewCafeteria(int id)
+{
+    int i;
+    const char *place;
+
+    for (i = 0; i < cafeteriaCount; i++) {
+        if (cafeterias[i].id == id) {
+            place = getLocationName(cafeterias[i].locationId);
+
+            if (place == NULL) {
+                place = "Unknown";
+            }
+
+            printf("\n%s\n", cafeterias[i].name);
+            printf("Location: %s\n", place);
+            printf("Opening hours: %s\n", cafeterias[i].hours);
+            printf("\nMenu:");
+
+            if (showMenuByVendor(id) == 0) {
+                printf("\nNo items listed.\n");
+            }
+
+            return 1;
+        }
+    }
+
+    return 0;
 }

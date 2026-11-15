@@ -149,10 +149,10 @@ void printRoutes(void)
 {
     int i;
 
-    printf("\n%-16s %-16s %s\n", "From", "To", "Distance (m, estimated)");
+    printf("\n%-24s %-24s %s\n", "From", "To", "Distance (m, estimated)");
 
     for (i = 0; i < routeCount; i++) {
-        printf("%-16s %-16s %d\n", getLocationName(routes[i].from), getLocationName(routes[i].to), routes[i].distance);
+        printf("%-24s %-24s %d\n", getLocationName(routes[i].from), getLocationName(routes[i].to), routes[i].distance);
     }
 }
 
@@ -177,6 +177,7 @@ const char *getLocationName(int id)
 
     return locations[id - 1].name;
 }
+
 int getLocationCount(void)
 {
     return locationCount;

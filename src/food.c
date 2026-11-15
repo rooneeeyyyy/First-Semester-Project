@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "food.h"
+#include "cafeteria.h"
 #include "utils.h"
 
 static Food foods[MAX_FOOD];
@@ -123,6 +124,158 @@ int searchFood(const char *query)
             }
 
             printFoodRow(&foods[i]);
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int searchByBudget(int maxPrice, const char *category)
+{
+    int i;
+    int count;
+
+    count = 0;
+
+    for (i = 0; i < foodCount; i++) {
+        if (foods[i].price <= maxPrice && (category[0] == '\0' || containsIgnoreCase(foods[i].category, category) || containsIgnoreCase(foods[i].name, category))) {
+            if (count == 0) {
+                printFoodHeader();
+            }
+
+            printFoodRow(&foods[i]);
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int showMenuByVendor(int vendorId)
+{
+    int i;
+    int count;
+
+    count = 0;
+
+    for (i = 0; i < foodCount; i++) {
+        if (foods[i].vendorId == vendorId) {
+            if (count == 0) {
+                printFoodHeader();
+            }
+
+            printFoodRow(&foods[i]);
+            count++;
+        }
+    }
+
+    return count;
+}
+
+static int priceAtVendor(const char *name, int vendorId)
+{
+    int i;
+
+    for (i = 0; i < foodCount; i++) {
+        if (foods[i].vendorId == vendorId && equalsIgnoreCase(foods[i].name, name)) {
+            return foods[i].price;
+        }
+    }
+
+    return 0;
+}
+
+static int isSelected(int vendorId, const int vendorIds[], int vendorCount)
+{
+    int i;
+
+    for (i = 0; i < vendorCount; i++) {
+        if (vendorIds[i] == vendorId) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int compareMenus(const int vendorIds[], int vendorCount)
+{
+    char seen[MAX_FOOD][MAX_FOOD_NAME];
+    int seenCount;
+    int i;
+    int j;
+    int v;
+    int duplicate;
+    int price;
+    int rows;
+    const char *vendorName;
+
+    seenCount = 0;
+    rows = 0;
+
+    printf("\n%-20s", "Item");
+
+    for (v = 0; v < vendorCount; v++) {
+        vendorName = getCafeteriaName(vendorIds[v]);
+
+        if (vendorName == NULL) {
+            vendorName = "Unknown";
+        }
+
+        printf(" %-16s", vendorName);
+    }
+
+    printf("\n");
+
+    for (i = 0; i < foodCount; i++) {
+        if (!isSelected(foods[i].vendorId, vendorIds, vendorCount)) {
+            continue;
+        }
+
+        duplicate = 0;
+
+        for (j = 0; j < seenCount; j++) {
+            if (equalsIgnoreCase(seen[j], foods[i].name)) {
+                duplicate = 1;
+            }
+        }
+
+        if (duplicate) {
+            continue;
+        }
+
+        strcpy(seen[seenCount], foods[i].name);
+        seenCount++;
+        printf("%-20s", foods[i].name);
+
+        for (v = 0; v < vendorCount; v++) {
+            price = priceAtVendor(foods[i].name, vendorIds[v]);
+
+            if (price == 0) {
+                printf(" %-16s", "-");
+            }
+            else {
+                printf(" %-16d", price);
+            }
+        }
+
+        printf("\n");
+        rows++;
+    }
+
+    return rows;
+}
+
+int countFoodMatches(const char *word)
+{
+    int i;
+    int count;
+
+    count = 0;
+
+    for (i = 0; i < foodCount; i++) {
+        if (containsIgnoreCase(foods[i].name, word) || containsIgnoreCase(foods[i].category, word)) {
             count++;
         }
     }
