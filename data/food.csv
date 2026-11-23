@@ -1,9 +1,93 @@
 food_id,name,category,price,vendor_id
-1,Test Biryani,Rice,250,1
-2,Test Chicken Roll,Snacks,180,1
-3,Test Samosa,Snacks,50,2
-4,Test Fries,Snacks,150,2
-5,Test Tea,Drinks,60,3
-6,Test Cold Drink,Drinks,100,3
-7,Test Burger,Fast Food,300,1
-8,Test Biryani,Rice,270,2
+1,Chicken Biryani,Rice,280,1
+2,Plain Biryani,Rice,150,1
+3,Chicken Pulao,Rice,280,1
+4,Beef Biryani,Rice,320,1
+5,Beef Pulao,Rice,320,1
+6,Chicken Qorma,Curry,240,1
+7,White Karahi,Curry,280,1
+8,Chicken Karahi,Curry,280,1
+9,Egg Chana,Curry,170,1
+10,Plain Chana,Curry,140,1
+11,Daal,Curry,120,1
+12,Vegetable,Curry,130,1
+13,Shashlik Rice,Rice,280,1
+14,Chicken Chowmein,Noodles,280,1
+15,Egg Paratha,Paratha,110,1
+16,Malai Beauty Sandwich,Sandwich,230,1
+17,Plain Chicken Sandwich,Sandwich,200,1
+18,Chicken Cheese Paratha,Paratha,260,1
+19,Chicken Paratha,Paratha,200,1
+20,Aloo Paratha,Paratha,150,1
+21,Aloo Cheese Paratha,Paratha,200,1
+22,Chicken Boti Roll,Rolls,240,1
+23,Zinger Roll,Rolls,280,1
+24,Chicken Mayo Roll,Rolls,210,1
+25,Chicken Patties,Snacks,100,1
+26,Vegetable Patties,Snacks,80,1
+27,Aloo Samosa,Snacks,60,1
+28,Chicken Samosa,Snacks,60,1
+29,Chicken Cheese Corn,Snacks,80,1
+30,Chicken Cheese Roll,Rolls,100,1
+31,Chicken Cheese Samosa,Snacks,90,1
+32,Club Sandwich,Sandwich,350,1
+33,Zinger Burger,Burgers,350,1
+34,Chicken Burger,Burgers,300,1
+35,Egg Kabab Burger,Burgers,200,1
+36,Pizza Slice,Pizza,260,1
+37,Mini Pizza,Pizza,150,1
+38,Sandwich Pizza,Pizza,250,1
+39,Danish Pizza,Pizza,250,1
+40,Half Pizza,Pizza,150,1
+41,Macaroni Pasta,Pasta,200,1
+42,Spaghetti,Pasta,200,1
+43,Tea,Drinks,80,1
+44,Coffee,Drinks,150,1
+45,Chapati,Bread,25,1
+46,Naan,Bread,30,1
+47,Afghani Zinger Roll,Rolls,250,3
+48,Afghani Mayo Roll,Rolls,200,3
+49,Afghani Chatni Roll,Rolls,200,3
+50,Afghani BBQ Roll,Rolls,200,3
+51,Chicken Chatni Roll,Rolls,200,3
+52,Chicken Mayo Roll,Rolls,200,3
+53,BBQ Roll,Rolls,200,3
+54,Chicken Chatni Cheese Roll,Rolls,250,3
+55,Chicken Mayo Cheese Roll,Rolls,250,3
+56,Zinger Roll,Rolls,280,3
+57,Zinger Cheese Roll,Rolls,250,3
+58,Fries Roll,Rolls,120,3
+59,Zinger Burger,Burgers,320,3
+60,Zinger Cheese Burger,Burgers,370,3
+61,Shami Burger,Burgers,120,3
+62,Anda Shami Burger,Burgers,150,3
+63,Chapli Burger,Burgers,200,3
+64,Chicken Burger,Burgers,250,3
+65,Zinger Fries,Fries,300,3
+66,Mayo Fries,Fries,150,3
+67,Pizza Fries,Fries,400,3
+68,Loaded Fries,Fries,230,3
+69,Gelato Single Scoop,Dessert,180,5
+70,Gelato Double Scoop,Dessert,320,5
+71,Cone Single Scoop,Dessert,180,5
+72,Espresso,Hot Coffee,350,6
+73,Americano,Hot Coffee,380,6
+74,Latte,Hot Coffee,450,6
+75,Cappuccino,Hot Coffee,450,6
+76,French Vanilla Latte,Hot Coffee,500,6
+77,Caramel Latte,Hot Coffee,500,6
+78,Hazelnut Latte,Hot Coffee,500,6
+79,Spanish Latte,Hot Coffee,500,6
+80,Mocha Latte,Hot Coffee,500,6
+81,Iced Americano,Iced Coffee,400,6
+82,Iced Latte,Iced Coffee,500,6
+83,Iced Spanish Latte,Iced Coffee,550,6
+84,Iced French Vanilla Latte,Iced Coffee,550,6
+85,Iced Caramel Latte,Iced Coffee,550,6
+86,Iced Mocha Latte,Iced Coffee,550,6
+87,Iced Hazelnut Latte,Iced Coffee,550,6
+88,French Vanilla Frappe,Frappe,650,6
+89,Caramel Frappe,Frappe,650,6
+90,Hazelnut Frappe,Frappe,650,6
+91,Mocha Frappe,Frappe,650,6
+92,Lotus Frappe,Frappe,650,6

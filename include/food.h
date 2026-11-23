@@ -1,7 +1,7 @@
 #ifndef FOOD_H
 #define FOOD_H
 
-#define MAX_FOOD 100
+#define MAX_FOOD 200
 #define MAX_FOOD_NAME 30
 #define MAX_CATEGORY 20
 

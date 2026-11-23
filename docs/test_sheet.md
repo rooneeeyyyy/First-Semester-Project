@@ -5,7 +5,7 @@ Run the program from the project root. Fill the last column with Pass or Fail.
 ## Startup
 | # | Test | Expected | Pass/Fail |
 |---|---|---|---|
-| 1 | Start the program | `Loaded: 14 locations, 22 routes, 8 food items, 4 cafeterias` | |
+| 1 | Start the program | `Loaded: 14 locations, 22 routes, 8 food items, 4 cafeterias` | | 
 | 2 | Rename data/food.csv, start the program, then rename it back | `Error: cannot open data/food.csv`, the "required data could not be loaded" message, and the program exits | |
 | 3 | Add the line `9,Bad Item,Snacks,abc,1` to food.csv, start, then delete the line | `Warning: data/food.csv line 10 skipped (bad row)` and 8 food items | |
 | 4 | Main menu: type `x`, then `9` | Invalid choice message each time, and the menu returns | |
