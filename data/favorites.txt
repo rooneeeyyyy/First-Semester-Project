@@ -1,2 +1,2 @@
 type,id
-food,3
+food,1
